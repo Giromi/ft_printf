@@ -57,15 +57,13 @@ typedef struct s_pctlst
 int			ft_printf(const char *s, ...);
 int			ft_strchr_idx(const char *s, int c);
 void		analysis_pct(const char **cur, t_gather *fwp);
-void		ft_handle_pound(char *dst, int bits);
-void		ft_handle_sign(char *dst, int bits, int n);
 int			cv_check(size_t arg, int bits);
-char		*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len)
+char		*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len);
 int			salloc_int(char **new, int len, char fill);
-int			isfg_inc(t_gather *fwp);
 void		ft_pctlstadd_back(t_pctlst **lst, t_pctlst *new);
 t_pctlst	*ft_pctlstnew(char *before);
-int			measure_full_len(t_gather *fwp, int *len);
+int			full_len_check(t_gather *fwp, int *len);
 void		info_fwp(t_gather *fwp);
 int			check_len_max(int *cnt, int check);
+int			 isfg_incr(t_gather *fwp);
 #endif

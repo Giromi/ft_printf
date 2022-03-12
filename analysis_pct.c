@@ -6,7 +6,7 @@
 /*   By: hchang <hchang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 14:51:32 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/03/12 20:33:06 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/12 22:17:39 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,20 +94,11 @@ static void	find_flags(const char **cur, int *bits)
 
 size_t	analysis_pct(const char **cur, t_gather *fwp, va_list *ap)
 {
-	size_t	arg;
-
 	ft_bzero(fwp, sizeof(t_gather));
 	find_flags(cur, &fwp->bits);
 	find_width_precision(cur, fwp);
 	find_conversion(cur, &fwp->bits);
 	if (!(fwp->bits & (FAIL_INT| FAIL_CONV)))
 		solve_conflict(fwp);
-	if (fwp->bits & (CV_S | CV_P))
-		return (va_arg(*ap, size_t));
-	else if (bits & CV_PCT)
-		arg = (size_t) '%';
-	else
-		arg = (size_t) va_arg(*ap, int);
-	return (arg);
 	return (bring_arg(ap, fwp->bits));
 }
