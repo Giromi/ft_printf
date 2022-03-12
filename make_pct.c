@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:56:43 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/12 20:41:25 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/12 22:32:54 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,8 @@ static char	*make_dst(char *str_arg, int bits, int len, int full_len)
 
 static char	*make_str_char(t_gather *fwp, char *arg, int *cnt, int len)
 {
-	if (measure_full_len(fwp, &len) == ERROR)
-		return (NULL);
-	if (check_len_max(cnt, fwp->full_len) == ERROR)
+	if (full_len_check(fwp, &len) == ERROR
+			|| check_len_max(cnt, fwp->full_len) == ERROR)
 		return (NULL);
 	if ((fwp->bits & CV_S) && arg == NULL)
 		return (make_dst("(null)", fwp->bits, len, fwp->full_len));

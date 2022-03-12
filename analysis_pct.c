@@ -6,7 +6,7 @@
 /*   By: hchang <hchang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 14:51:32 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/03/12 22:17:39 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/12 22:59:08 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,18 +83,21 @@ static void	find_flags(const char **cur, int *bits)
 {
 	int	idx;
 
-	while (*(*cur)++)
+	while (**cur)
 	{
 		idx = ft_strchr_idx(FG_SET, **cur);
 		if (idx == ERROR)
 			break ;
 		*bits |= 1 << (FG_BIT_BEGIN - idx);
+		(*cur)++;
 	}
 }
 
-size_t	analysis_pct(const char **cur, t_gather *fwp, va_list *ap)
+size_t	analysis_pct(const char **cur, va_list *ap, t_gather *fwp)
 {
-	ft_bzero(fwp, sizeof(t_gather));
+	if (!**cur)
+		return (SUCCESS);
+	(*cur)++;
 	find_flags(cur, &fwp->bits);
 	find_width_precision(cur, fwp);
 	find_conversion(cur, &fwp->bits);

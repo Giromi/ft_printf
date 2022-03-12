@@ -6,14 +6,20 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 17:48:14 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/12 22:16:35 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/12 22:51:03 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
+int isfg_incr(t_gather *fwp)
+{
+	if (fwp->bits & FG_POUND)
+		return (2);
+	return ((fwp->bits & (FG_PLUS | FG_SPACE)) != 0);
+}
 
-static void	ft_handle_pl_sp(char *dst, int bits, int sign)
+static void	ft_handle_incr(char *dst, int bits, int sign)
 {
 	int		i;
 	char	incr;
@@ -38,11 +44,11 @@ static void	ft_handle_pl_sp(char *dst, int bits, int sign)
 		dst[i - 2] =  '0';
 }
 
-static void	convert_num_mem_base(char *dst, size_t arg, int len, int bits)
+static void	convert_num_mem_base(char *dst, int bits, size_t arg, int len)
 {
 	unsigned int nbr;
 
-	if (arg)
+	if (arg && len)
 	{
 		nbr = arg;
 		if (bits & (CV_SX | CV_LX))
@@ -93,16 +99,8 @@ char	*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len)
 		sign = -1;
 		fwp->bits |= FG_PLUS;
 	}
-	if (full_len_check(fwp, &len) == ERROR)
-		return (NULL);
-	if (check_len_max(cnt, fwp->full_len) == ERROR)
+	if (full_len_check(fwp, &len) == ERROR
+			|| check_len_max(cnt, fwp->full_len) == ERROR)
 		return (NULL);
 	return (make_dst(arg * sign, sign, fwp, len));
-}
-
-int isfg_incr(t_gather *fwp)
-{
-	if (fwp->bits & FG_POUND)
-		return (2);
-	return ((fwp->bits & (FG_PLUS | FG_SPACE)) != 0);
 }

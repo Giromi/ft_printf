@@ -4,6 +4,7 @@
 # include "libft/libft.h"
 # include <stdarg.h>
 # include <unistd.h>
+# include <stdio.h>
 # include <stdlib.h>
 # define FAIL_INT 0B10000000000000000000000000000000
 # define FAIL_CONV 0B100000000000000000000000
@@ -56,8 +57,8 @@ typedef struct s_pctlst
 
 int			ft_printf(const char *s, ...);
 int			ft_strchr_idx(const char *s, int c);
-void		analysis_pct(const char **cur, t_gather *fwp);
-int			cv_check(size_t arg, int bits);
+size_t	analysis_pct(const char **cur, va_list *ap, t_gather *fwp);
+char		*make_pct(const char *cur, t_gather *fwp, size_t arg, int *cnt);
 char		*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len);
 int			salloc_int(char **new, int len, char fill);
 void		ft_pctlstadd_back(t_pctlst **lst, t_pctlst *new);
@@ -65,5 +66,6 @@ t_pctlst	*ft_pctlstnew(char *before);
 int			full_len_check(t_gather *fwp, int *len);
 void		info_fwp(t_gather *fwp);
 int			check_len_max(int *cnt, int check);
-int			 isfg_incr(t_gather *fwp);
+int			isfg_incr(t_gather *fwp);
+size_t		bring_arg(va_list *ap, int bits);
 #endif

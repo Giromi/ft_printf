@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "ft_printf.h"
 
+//test...
+
 int	main(void)
 {
 	int		bits = CV_D;
@@ -10,11 +12,9 @@ int	main(void)
 	size_t	n;
 	char	dst[30];
 
-	input = "|%d|";
-	cnt = ft_printf(input, 10) - 2;
-	printf("=> cnt : %d (ft_printf)", cnt);
+	cnt = ft_printf("|%d|", 10) - 2;
+	printf("\t=> cnt : %d (ft_printf)\n", cnt);
+	cnt = printf("|%d|", 10) - 2;
+	printf("\t=> cnt : %d (printf)\n", cnt);
 
-	cnt = ft_printf(input, 10) - 2;
-	cnt = printf(input, 10) - 2;
-	printf("=> cnt : %d (printf)", cnt);
 }

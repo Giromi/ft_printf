@@ -6,7 +6,7 @@
 #    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
-#    Updated: 2022/03/12 19:23:37 by minsuki2         ###   ########.fr        #
+#    Updated: 2022/03/12 22:33:49 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CFLAGS = -Wall -Wextra -Werror -I$(HEADERDIR)
 NAME = libftprintf.a
 LIBFT = libft.a
 LIBFTDIR = ./libft
-MAIN = main.c
+MAINDIR = MAIN/
+MAIN = $(MAINDIR)main_diu.c
 TARGET = a.out
 
 AR = ar
@@ -32,10 +33,8 @@ HEADERDIR = .
 
 PRINTFC = ft_printf.c		\
 		  ft_printf_utils.c	\
-		  ft_printf_utils2.c\
 		  analysis_pct.c	\
-		  make_origin_len.c	\
-		  make_str.c		\
+		  make_pct.c		\
 		  make_num_mem.c
 
 PRINTFC_BONUS = ft_printf.c		\
