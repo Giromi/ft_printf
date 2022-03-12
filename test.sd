@@ -1,0 +1,4 @@
+
+@@@@@@@@@@ cmp result @@@@@@@@@@
+diff ft_printf.txt printf.txt
+Binary files ft_printf.txt and printf.txt differ

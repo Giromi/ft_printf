@@ -6,7 +6,7 @@
 /*   By: hchang <hchang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 14:51:32 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/03/12 22:59:08 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/12 23:12:52 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	solve_conflict(t_gather *fwp)
 	if (fwp->bits & CV_I)
 		fwp->bits |= CV_D;
 	if (fwp->bits & (CV_C | CV_PCT))
-		fwp->bits &= ~(FG_ZERO | FG_PLUS | FG_SPACE | FG_POUND | PC_EXIST);
+		fwp->bits &= ~(FG_PLUS | FG_SPACE | FG_POUND | PC_EXIST);
 	else if (fwp->bits & CV_S)
 		fwp->bits &= ~(FG_ZERO | FG_PLUS | FG_SPACE | FG_POUND);
 	else if (fwp->bits & CV_P)

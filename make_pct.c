@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:56:43 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/12 22:32:54 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/12 23:22:38 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ static int	check_len_str_char(const char *arg, int bits)
 
 	if (arg == NULL)
 		return (6);
-	if (bits & (CV_C | CV_PCT))
-		return (1);
 	len = 0;
 	while (*arg++ && (len < FINAL_LEN))
 		len++;
@@ -96,8 +94,10 @@ char	*make_pct(const char *cur, t_gather *fwp, size_t arg, int *cnt)
 		return (ft_strdup(""));
 	if (fwp->bits & FAIL_CONV)
 		return (ft_substr(cur, 0, 1));
-	if (fwp->bits & (CV_S | CV_C | CV_PCT))
+	if (fwp->bits & CV_S)
 		len = check_len_str_char((char *)arg, fwp->bits);
+	else if (CV_C | CV_PCT)
+		len = 1;
 	else
 		len = check_len_num_mem(arg, fwp->bits);
 	if (fwp->bits & (CV_D | CV_U | CV_SX | CV_LX | CV_P))

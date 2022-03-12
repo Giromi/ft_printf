@@ -6,7 +6,7 @@
 #    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
-#    Updated: 2022/03/12 22:33:49 by minsuki2         ###   ########.fr        #
+#    Updated: 2022/03/13 01:19:37 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,12 @@ NAME = libftprintf.a
 LIBFT = libft.a
 LIBFTDIR = ./libft
 MAINDIR = MAIN/
-MAIN = $(MAINDIR)main_diu.c
-TARGET = a.out
+MAIN_PRINTF = $(MAINDIR)main_printf.c
+MAIN_FT_PRINTF = $(MAINDIR)main_ft_printf.c
+TARGET_PRINTF = printf.out
+RESULT_PRINTF = printf.txt
+TARGET_FT_PRINTF = ft_printf.out
+RESULT_FT_PRINTF = ft_printf.txt
 
 AR = ar
 ARFLAGS = -rcus
@@ -31,20 +35,18 @@ PRINTFODIR_BONUS = .
 
 HEADERDIR = .
 
-PRINTFC = ft_printf.c		\
-		  ft_printf_utils.c	\
-		  analysis_pct.c	\
-		  make_pct.c		\
-		  make_num_mem.c
+FT_PRINTF_SRC_FILES = ft_printf.c		\
+		  			  ft_printf_utils.c	\
+		  			  analysis_pct.c	\
+		  			  make_pct.c		\
+		  			  make_num_mem.c
 
-PRINTFC_BONUS = ft_printf.c		\
-		  		ft_printf_utils.c	\
-		  ft_printf_utils2.c\
-		  analysis_pct.c	\
-		  make_origin_len.c	\
-		  make_cspct.c		\
-		  make_diu.c		\
-		  make_xp.c
+
+PRINTFC_BONUS_SRC_FILES = ft_printf.c		\
+		  			  ft_printf_utils.c	\
+		  			  analysis_pct.c	\
+		  			  make_pct.c		\
+		  			  make_num_mem.c
 
 _PRINTFOBJS = $(PRINTFC:.c=.o)
 _PRINTFOBJS_BONUS = $(PRINTFC_BONUS:.c=.o)
@@ -70,22 +72,36 @@ $(NAME): $(PRINTFOBJS)
 	cp $(LIBFTDIR)/$(LIBFT) $@
 	$(AR) $(ARFLAGS) $@ $^
 
-exe: $(TARGET)
+ans: $(RESULT_PRINTF)
+
+# cat -e $<
+
+$(RESULT_PRINTF): $(TARGET_PRINTF)
+	./$< > $@
+
+$(TARGET_PRINTF): $(MAIN_PRINTF)
+	$(CC) $< -I./libft/ -o $@
+
+
+exe: $(RESULT_FT_PRINTF) all
+
+# cat -e $<
+
+$(RESULT_FT_PRINTF): $(TARGET_FT_PRINTF)
+	./$< > $@
+
+$(TARGET_FT_PRINTF): $(MAIN_FT_PRINTF) $(FT_PRINTF_SRC_FILES)
+	$(CC) $< -I./ -L./ -lftprintf -o $@
+
+cmp: ans exe
+	@echo
+	@echo "@@@@@@@@@@ cmp result @@@@@@@@@@"
+	diff -a $(RESULT_PRINTF) $(RESULT_FT_PRINTF)| cat -e
 
 $(TARGET): $(NAME) $(MAIN) $(INCLUDES)
 	@echo --------------------------------
 	@echo $@ Making...
-	$(CC) -g $(MAIN) $(PRINTFC) -I./ -L./ -lftprintf
-
-diu: $(DIU_TARGET)
-
-$(DIU_TARGET): $(NAME) $(MAIN) $(INCLUDES)
-	@echo --------------------------------
-	@echo $@ Making...
-	$(CC) -g $(MAIN_DIU) $(PRINTFC) -I./ -L./ -lftprintf
-
-# %.out: %.c bonus $(NAME) $(MAIN) $(INCLUDES)
-#     $(CC) -g $(addprefix $(MAIN:%.c=%)_, $(<:ft_%=%)) -I./ $< -L./ -lft
+	$(CC) -g $(MAIN_FT_PRINTF) $(PRINTFC) -I./ -L./ -lftprintf -o ft_printf.out
 
 
 $(PRINTFODIR)/%.o: $(PRINTFCDIR)/%.c $(PRINTFHEADER)

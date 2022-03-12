@@ -6,7 +6,7 @@
 int	main(void)
 {
 	int		bits = CV_D;
-	int		cnt;
+	intinput		cnt;
 	int		len;
 	char	*input;
 	size_t	n;
