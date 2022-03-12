@@ -6,7 +6,7 @@
 /*   By: hchang <hchang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 14:51:32 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/03/07 03:53:35 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/12 20:33:06 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,15 @@ static void	solve_conflict(t_gather *fwp)
 		fwp->bits &= ~(FG_PLUS | FG_SPACE);
 }
 
-static void	find_conversion(const char **cur, t_gather *fwp)
-{
-	if ((ft_nstrchr_cnt(CV_SET, **cur, NULL) != ERROR) && **cur != '\0')
-		fwp->bits |= 1 << (CV_BIT_BEGIN - ft_nstrchr_cnt(CV_SET, **cur, NULL));
-	else
-		fwp->bits |= FAIL_CONV;
-}
 
 static void	find_width_precision(const char **cur, t_gather *fwp)
 {
 	if (ft_isdigit(**cur))
 		fwp->bits |= WD_EXIST;
-	while (ft_isdigit(**cur) && (**cur != '\0'))
+	while (**cur && ft_isdigit(**cur))
 	{
-		if ((fwp->width > 214748364) || ((fwp->width == 214748364)
-				&& ((**cur - '0') >= 7)))
+		if ((fwp->width > INT_MAX / 10) || ((fwp->width == INT_MAX / 10)
+				&& ((**cur - '0') >= INT_MAX % 10)))
 		{
 			fwp->bits |= FAIL_INT;
 			return ;
@@ -64,31 +57,57 @@ static void	find_width_precision(const char **cur, t_gather *fwp)
 	}
 	if (**cur == '.' && (*cur)++)
 		fwp->bits |= PC_EXIST;
-	while (ft_isdigit(**cur) && (**cur != '\0'))
+	while (**cur && ft_isdigit(**cur))
 	{
 		fwp->precision = fwp->precision * 10 + (**cur - '0');
 		(*cur)++;
 	}
 }
 
-static void	find_flags(const char **cur, t_gather *fwp)
+
+static void	find_conversion(const char **cur, int *bits)
 {
-	while ((ft_nstrchr_cnt(FG_SET, **cur, NULL) != ERROR) && **cur != '\0')
+	int	idx;
+
+	idx = ft_strchr_idx(CV_SET, **cur);
+	if (**cur && idx != ERROR)
 	{
-		fwp->bits |= 1 << (FG_BIT_BEGIN - ft_nstrchr_cnt(FG_SET, **cur, NULL));
+		*bits |= 1 << (CV_BIT_BEGIN  - idx);
 		(*cur)++;
+	}
+	else
+		*bits |= FAIL_CONV;
+}
+
+static void	find_flags(const char **cur, int *bits)
+{
+	int	idx;
+
+	while (*(*cur)++)
+	{
+		idx = ft_strchr_idx(FG_SET, **cur);
+		if (idx == ERROR)
+			break ;
+		*bits |= 1 << (FG_BIT_BEGIN - idx);
 	}
 }
 
-void	analysis_pct(const char **cur, t_gather *fwp, int *cnt)
+size_t	analysis_pct(const char **cur, t_gather *fwp, va_list *ap)
 {
-	if (**cur == '\0' && *cnt > 0)
-		return ;
-	(*cur)++;
-	find_flags(cur, fwp);
+	size_t	arg;
+
+	ft_bzero(fwp, sizeof(t_gather));
+	find_flags(cur, &fwp->bits);
 	find_width_precision(cur, fwp);
-	find_conversion(cur, fwp);
-	if ((fwp->bits & FAIL_INT) || (fwp->bits & FAIL_CONV))
-		return ;
-	solve_conflict(fwp);
+	find_conversion(cur, &fwp->bits);
+	if (!(fwp->bits & (FAIL_INT| FAIL_CONV)))
+		solve_conflict(fwp);
+	if (fwp->bits & (CV_S | CV_P))
+		return (va_arg(*ap, size_t));
+	else if (bits & CV_PCT)
+		arg = (size_t) '%';
+	else
+		arg = (size_t) va_arg(*ap, int);
+	return (arg);
+	return (bring_arg(ap, fwp->bits));
 }

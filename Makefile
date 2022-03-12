@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hojinjang <hojinjang@student.42.fr>        +#+  +:+       +#+         #
+#    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/11/11 14:33:20 by jaesjeon          #+#    #+#              #
-#    Updated: 2022/03/07 03:15:24 by minsuki2         ###   ########.fr        #
+#    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
+#    Updated: 2022/03/12 19:23:37 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,9 +35,8 @@ PRINTFC = ft_printf.c		\
 		  ft_printf_utils2.c\
 		  analysis_pct.c	\
 		  make_origin_len.c	\
-		  make_cspct.c		\
-		  make_diu.c		\
-		  make_xp.c
+		  make_str.c		\
+		  make_num_mem.c
 
 PRINTFC_BONUS = ft_printf.c		\
 		  		ft_printf_utils.c	\

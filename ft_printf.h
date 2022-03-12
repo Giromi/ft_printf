@@ -26,6 +26,7 @@
 # define CV_PCT 0B1
 # define ERROR -1
 # define SUCCESS 0
+# define CV_C_LEN 1
 # define HEX 16
 # define HEX_BASE_LOWER "0123456789abcdef"
 # define HEX_BASE_UPPER "0123456789ABCDEF"
@@ -37,6 +38,7 @@
 # define CV_SET "cspdiuxX%"
 # define CV_BIT_BEGIN 8
 // # define INT_MAX 2147483647
+# define FINAL_LEN 2147483646
 
 typedef struct s_gather
 {
@@ -50,25 +52,20 @@ typedef struct s_pctlst
 {
 	char			*before_pct;
 	char			*after_pct;
-	int				full_len;
-	struct s_pctlst	*next;
 }	t_pctlst;
 
 int			ft_printf(const char *s, ...);
-int			ft_nstrchr_cnt(const char *s, int c, int *cnt);
-void		analysis_pct(const char **cur, t_gather *fwp, int *cnt);
-void		ft_handle_pound(char *dst, t_gather *fwp);
-int			make_cv_len(size_t arg, int bits);
-char		*make_cspct(t_gather *fwp, char *arg, int *cnt, int len);
-char		*make_diu(t_gather *fwp, int n, int *cnt, int len);
-char		*make_p(t_gather *fwp, size_t address, int *cnt, int len);
-char		*make_x(t_gather *fwp, size_t arg, int *cnt, int len);
+int			ft_strchr_idx(const char *s, int c);
+void		analysis_pct(const char **cur, t_gather *fwp);
+void		ft_handle_pound(char *dst, int bits);
+void		ft_handle_sign(char *dst, int bits, int n);
+int			cv_check(size_t arg, int bits);
+char		*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len)
 int			salloc_int(char **new, int len, char fill);
 int			isfg_inc(t_gather *fwp);
-t_pctlst	*ft_lstadd_back_last(t_pctlst **lst, t_pctlst *new);
-t_pctlst	*ft_lstnew_before_str(char *before);
-int			measure_len_diuxp(t_gather *fwp, int *len);
-void		print_lst(t_pctlst *lst);
+void		ft_pctlstadd_back(t_pctlst **lst, t_pctlst *new);
+t_pctlst	*ft_pctlstnew(char *before);
+int			measure_full_len(t_gather *fwp, int *len);
 void		info_fwp(t_gather *fwp);
-int			check_max(int *cnt, int full_len);
+int			check_len_max(int *cnt, int check);
 #endif

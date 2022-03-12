@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hojinjang <hojinjang@student.42.fr>        +#+  +:+       +#+        */
+/*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/02 23:32:07 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/07 04:47:21 by minsuki2         ###   ########.fr       */
+/*   Created: 2022/03/07 01:39:46 by minsuki2          #+#    #+#             */
+/*   Updated: 2022/03/12 20:32:39 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,18 @@ int	salloc_int(char **new, int len, char fill)
 	return (SUCCESS);
 }
 
+int	ft_strchr_idx(const char *s, int c)
+{
+	int	idx;
+
+	idx = 0;
+	while (s[idx] && s[idx] != (char)c)
+		idx++;
+	if (c == '%')
+		return (idx);
+	return (ERROR);
+}
+
 int	isfg_inc(t_gather *fwp)
 {
 	if (fwp->bits & FG_POUND)
@@ -29,45 +41,14 @@ int	isfg_inc(t_gather *fwp)
 	return ((fwp->bits & (FG_PLUS | FG_SPACE)) != 0);
 }
 
-void	ft_handle_pound(char *dst, t_gather *fwp)
+int	check_len_max(int *cnt, int check)
 {
-	int	i;
-
-	i = 2;
-	while (dst[i] && !ft_strchr(HEX_BASE_ALL, dst[i]))
-		i++;
-	if ((fwp->bits & CV_SX) || (fwp->bits & CV_P))
-		dst[i - 1] = 'x';
-	else
-		dst[i - 1] = 'X';
-	dst[i - 2] = '0';
-}
-
-int	measure_len_diuxp(t_gather *fwp, int *len)
-{
-	int	full_len;
-
-	if (fwp->precision > *len)
-		*len = fwp->precision;
-	full_len = fwp->width;
-	if (*len > fwp->width)
-		full_len = *len;
-	if (isfg_inc(fwp) && (full_len == *len || full_len == *len + 1))
-		full_len += isfg_inc(fwp) - (full_len - *len);
-	if (full_len < 0 || full_len == INT_MAX)
+	if (FINAL_LEN - *cnt < check)
 		return (ERROR);
-	return (full_len);
+	*cnt += check;
+	return (SUCCESS);
 }
 
-int	check_max(int *cnt, int full_len)
+size_t	bring_arg(va_list *ap, int bits)
 {
-	int	idx;
-
-	idx = 0;
-	while (idx++ < full_len)
-	{
-		if (++(*cnt) == 2147483647)
-			return (ERROR);
-	}
-	return (SUCCESS);
 }
