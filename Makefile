@@ -6,117 +6,135 @@
 #    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
-#    Updated: 2022/03/13 01:19:37 by minsuki2         ###   ########.fr        #
+#    Updated: 2022/03/13 06:16:45 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
-RM = rm -f
-CFLAGS = -Wall -Wextra -Werror -I$(HEADERDIR)
-
-NAME = libftprintf.a
-LIBFT = libft.a
-LIBFTDIR = ./libft
-MAINDIR = MAIN/
-MAIN_PRINTF = $(MAINDIR)main_printf.c
-MAIN_FT_PRINTF = $(MAINDIR)main_ft_printf.c
-TARGET_PRINTF = printf.out
-RESULT_PRINTF = printf.txt
-TARGET_FT_PRINTF = ft_printf.out
-RESULT_FT_PRINTF = ft_printf.txt
-
-AR = ar
-ARFLAGS = -rcus
-
-PRINTFCDIR = .
-PRINTFODIR = .
-PRINTFCDIR_BONUS = .
-PRINTFODIR_BONUS = .
-
-HEADERDIR = .
-
-FT_PRINTF_SRC_FILES = ft_printf.c		\
-		  			  ft_printf_utils.c	\
-		  			  analysis_pct.c	\
-		  			  make_pct.c		\
-		  			  make_num_mem.c
+CC 				= gcc
+CFLAGS 			= -Wall -Wextra -Werror -c
+INC 			= -I
+CUR_DIR			= ./
+RM 				= rm -vf
+AR 				= ar
+ARFLAGS 		= -rcus
+MAKE 			= make
+MAKE_C 			= make -C
 
 
-PRINTFC_BONUS_SRC_FILES = ft_printf.c		\
-		  			  ft_printf_utils.c	\
-		  			  analysis_pct.c	\
-		  			  make_pct.c		\
-		  			  make_num_mem.c
+LIBFT_DIR 		= libft/
+LIBFT 			= libft.a
+LIBFT_H 		= libft.h
+FT_PRINTF 		= libftprintf.a
 
-_PRINTFOBJS = $(PRINTFC:.c=.o)
-_PRINTFOBJS_BONUS = $(PRINTFC_BONUS:.c=.o)
-PRINTFOBJS = $(addprefix $(PRINTFODIR)/, $(_PRINTFOBJS))
-PRINTFOBJS_BONUS = $(addprefix $(PRINTFODIR_BONUS)/, $(_PRINTFOBJS_BONUS))
+MANDATORY_DIR 	= mandatory/
+BONUS_DIR 		= bonus/
+TARGET_DIR 		= $(MANDATORY_DIR)
 
-PRINTFHEADER = $(HEADERDIR)/ft_printf.h
-PRINTFHEADER_BONUS = $(HEADERDIR)/ft_printf_bonus.h
 
-ifdef WITH_BONUS
-	PRINTFCDIR = $(PRINTFCDIR_BONUS)
-	PRINTFODIR = $(PRINTFODIR_BONUS)
-	PRINTFOBJS = $(PRINTFOBJS_BONUS)
-	PRINTFHEADER = $(PRINTFHEADER_BONUS)
-endif
 
-.PHONY: all clean fclean re bonus
+SRC_FILES 		= ft_printf.c		\
+		  		  ft_printf_utils.c	\
+		  		  analysis_pct.c	\
+		  		  make_pct.c		\
+		  		  make_num_mem.c
 
-all: $(NAME)
 
-$(NAME): $(PRINTFOBJS)
-	make -C $(LIBFTDIR)
-	cp $(LIBFTDIR)/$(LIBFT) $@
-	$(AR) $(ARFLAGS) $@ $^
+BONUS_SRC_FILES = ft_printf_bonus.c			\
+		  	      ft_printf_utils_bonus.c	\
+		  	   	  analysis_pct_bonus.c		\
+		  		  make_pct_bonus.c			\
+				  make_num_mem_bonus.c
+
+HAD_FILES 		= ft_printf.h
+BONUS_HAD_FILES = ft_printf_bonus.h
+
+FT_PRINTF_BONUS_SRCS = $(addprefix $(BONUS_DIR), $(BONUS_SRC_FILES))
+
+
+FT_PRINTF_HADS = $(addprefix $(MANDATORY_DIR), $(HAD_FILES))
+FT_PRINTF_BONUS_HADS = $(addprefix $(BONUS_DIR), $(BONUS_HAD_FILES))
+
+FT_PRINTF_SRCS = $(SRC_FILES)
+SRCS = $(addprefix $(TARGET_DIR), $(FT_PRINTF_SRCS))
+HADS = $(addprefix $(TARGET_DIR), $(FT_PRINTF_HADS))
+HADS = $(FT_PRINTF_HADS)
+OBJS = $(SRCS:.c=.o)
+
+#-----
+MAIN_DIR = main/
+MAIN_PRINTF = $(MAIN_DIR)main_printf.c
+MAIN_FT_PRINTF = $(MAIN_DIR)main_ft_printf.c
+
+TARGET_PRINTF = $(MAIN_DIR)printf.out
+TARGET_FT_PRINTF = $(MAIN_DIR)ft_printf.out
+RESULT_FT_PRINTF = $(MAIN_DIR)ft_printf.txt
+RESULT_PRINTF = $(MAIN_DIR)printf.txt
+#-----
+
+
+
+
+all: $(FT_PRINTF)
+
+#libft는 수정 안할거라는 전제
+$(FT_PRINTF): $(LIBFT_DIR)$(LIBFT) $(OBJS)
+	cp $< $@
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+
+$(LIBFT_DIR)$(LIBFT):
+	$(MAKE_C) $(LIBFT_DIR)
+
+$(TARGET_DIR)%.o: $(TARGET_DIR)%.c $(HADS) $(LIBFT_DIR)$(LIBFT_H)
+	@echo $@
+	$(CC) $(CFLAGS) $< $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -o $@
+
+
 
 ans: $(RESULT_PRINTF)
 
-# cat -e $<
-
 $(RESULT_PRINTF): $(TARGET_PRINTF)
-	./$< > $@
+	$< > $@
 
 $(TARGET_PRINTF): $(MAIN_PRINTF)
-	$(CC) $< -I./libft/ -o $@
+	$(CC) -g $< -I./libft/ -o $@
 
 
-exe: $(RESULT_FT_PRINTF) all
 
-# cat -e $<
-
-$(RESULT_FT_PRINTF): $(TARGET_FT_PRINTF)
-	./$< > $@
-
-$(TARGET_FT_PRINTF): $(MAIN_FT_PRINTF) $(FT_PRINTF_SRC_FILES)
-	$(CC) $< -I./ -L./ -lftprintf -o $@
+exe: all
+	$(CC) -g $(MAIN_FT_PRINTF) $(SRCS) $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -L./ -lftprintf -o $(TARGET_FT_PRINTF)
+	$(TARGET_FT_PRINTF) > $(RESULT_FT_PRINTF)
 
 cmp: ans exe
 	@echo
 	@echo "@@@@@@@@@@ cmp result @@@@@@@@@@"
-	diff -a $(RESULT_PRINTF) $(RESULT_FT_PRINTF)| cat -e
+	diff -a $(RESULT_FT_PRINTF) $(RESULT_PRINTF)| cat -e
 
-$(TARGET): $(NAME) $(MAIN) $(INCLUDES)
-	@echo --------------------------------
-	@echo $@ Making...
-	$(CC) -g $(MAIN_FT_PRINTF) $(PRINTFC) -I./ -L./ -lftprintf -o ft_printf.out
-
+# $(TARGET): $(NAME) $(MAIN) $(FT_PRINTF_INCS)
+#     @echo --------------------------------
+#     @echo $@ Making...
+#     $(CC) -g $(MAIN_FT_PRINTF) $(PRINTFC) -I./ -L./ -lftprintf -o ft_printf.out
 
 $(PRINTFODIR)/%.o: $(PRINTFCDIR)/%.c $(PRINTFHEADER)
 
 clean:
-	make clean -C $(LIBFTDIR)
-	$(RM) $(PRINTFOBJS) $(PRINTFOBJS_BONUS)
+	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
+	$(MAKE_C) $(LIBFT_DIR) clean
+	@echo
+	$(RM) $(FT_PRINTF_SRCS:.c=.o)
+	$(RM) $(FT_PRINTF_BONUS_SRCS:.c=.o)
+	@echo "-------------------------------------------------"
 
-fclean:
-	make fclean -C $(LIBFTDIR)
-	$(RM) $(PRINTFOBJS) $(PRINTFOBJS_BONUS)
-	$(RM) $(LIBFT)
-	$(RM) $(NAME)
+fclean: clean
+	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
+	$(RM) $(LIBFT_DIR)$(LIBFT)
+	$(RM) $(FT_PRINTF)
 
 re: fclean all
 
 bonus:
-	@make WITH_BONUS=1 all
+	@$(MAKE) "TARGET_DIR		= $(BONUS_DIR)
+			  FT_PRINTF_SRCS 	= $(BONUS_SRC_FILES)
+			  HADS				= $(HADS_FILES)
+		   	 "all
+
+.PHONY: all clean fclean re bonus

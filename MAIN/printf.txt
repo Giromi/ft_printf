@@ -1,0 +1,1 @@
+|        0xffffffff|	=> cnt : 18	[CASE P-11]
