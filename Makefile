@@ -6,7 +6,7 @@
 #    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
-#    Updated: 2022/03/13 17:34:15 by minsuki2         ###   ########.fr        #
+#    Updated: 2022/03/13 20:21:45 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,27 +92,37 @@ $(TARGET_DIR)%.o: $(TARGET_DIR)%.c $(HADS)
 # ---------------------------
 #
 
-ans: $(RESULT_PRINTF)
-
-$(RESULT_PRINTF): $(TARGET_PRINTF)
-	$< > $@
-
-$(TARGET_PRINTF): $(MAIN_PRINTF)
-	$(CC) -g $< -I./libft/ -o $@
+ans:
+	@echo @@@@@@@@@@ printf @@@@@@@@@@
+	cp $(MAIN_FT_PRINTF) $(MAIN_PRINTF)
+	sed -i "" 's/ft_printf/printf/g' $(MAIN_PRINTF)
+	@echo
+	$(CC) -g $(MAIN_PRINTF) -I./libft/ -o $(TARGET_PRINTF)
+	$(TARGET_PRINTF) > $(RESULT_PRINTF)
+	@echo
+	grep -aw "cnt" $(RESULT_PRINTF)
+# cat -e $(RESULT_PRINTF)
 
 
 
 exe: all
+	@echo @@@@@@@@@@ ft_printf @@@@@@@@@@
+	@echo
 	$(CC) -g $(MAIN_FT_PRINTF) $(FT_PRINTF_OBJS:.o=.c) $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -L./ -lftprintf -o $(TARGET_FT_PRINTF)
 	$(TARGET_FT_PRINTF) > $(RESULT_FT_PRINTF)
+	@echo
+	grep -aw "cnt" $(RESULT_FT_PRINTF)
+	@echo
+# cat -e $(RESULT_FT_PRINTF)
 
 fsan: all
 	$(CC) -fsanitize=address $(MAIN_FT_PRINTF) $(FT_PRINTF_OBJS:.o=.c) $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -L./ -lftprintf -o $(TARGET_FT_PRINTF)
+	$(TARGET_FT_PRINTF)
 
 cmp: ans exe
 	@echo
 	@echo "@@@@@@@@@@ cmp result @@@@@@@@@@"
-	diff -a $(RESULT_FT_PRINTF) $(RESULT_PRINTF)| cat -e
+	diff -a $(RESULT_PRINTF) $(RESULT_FT_PRINTF) | cat -e
 
 # $(TARGET): $(NAME) $(MAIN) $(FT_PRINTF_INCS)
 #     @echo --------------------------------
@@ -142,4 +152,4 @@ bonus: $(LIBFT_DIR)$(LIBFT)
 	all
 
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re bonus ans exe
