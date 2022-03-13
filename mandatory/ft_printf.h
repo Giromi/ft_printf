@@ -38,6 +38,8 @@
 # define CV_SET "cspdiuxX%"
 # define CV_BIT_BEGIN 8
 # define FINAL_LEN 2147483646
+# define RTN_ERROR 0
+# define RTN_IDX 1
 
 typedef struct s_gather
 {
@@ -54,7 +56,7 @@ typedef struct s_pctlst
 }	t_pctlst;
 
 int			ft_printf(const char *s, ...);
-int			ft_strchr_idx(const char *s, int c);
+int			ft_strchr_idx(const char *s, int c, int switcher);
 void		analysis_pct(const char **cur, t_gather *fwp);
 char		*make_pct(const char *cur, t_gather *fwp, size_t arg, int *cnt);
 char		*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len);

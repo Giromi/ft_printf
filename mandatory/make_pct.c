@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:56:43 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 05:34:58 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/13 18:04:16 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	check_len_num_mem(size_t arg, int bits)
 	len = 0;
 	base_num = DEC;
 	num = arg;
-	if (bits & (CV_SX | CV_LX | CV_D))
+	if (bits & (CV_SX | CV_LX | CV_D | CV_U))
 		arg = num;
 	if (bits & (CV_SX | CV_LX | CV_P))
 		base_num = HEX;

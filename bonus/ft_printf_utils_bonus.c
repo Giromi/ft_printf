@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
+/*   ft_printf_utils_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 01:39:46 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/12 22:20:39 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/13 16:13:19 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 int	salloc_int(char **new, int len, char fill)
 {
@@ -22,16 +22,17 @@ int	salloc_int(char **new, int len, char fill)
 	return (SUCCESS);
 }
 
-int	ft_strchr_idx(const char *s, int c)
+int	ft_strchr_idx(const char *s, int c, int switcher)
 {
 	int	idx;
 
 	idx = 0;
-	while (s[idx] && s[idx] != (char)c)
-		idx++;
-	if (!s[idx] && c != '%')
-		return (ERROR);
-	return (idx);
+	while (s[idx])
+		if (s[idx++] == (char)c)
+			return (idx - 1);
+	if (switcher)
+		return (idx);
+	return (ERROR);
 }
 
 
@@ -60,13 +61,9 @@ int	full_len_check(t_gather *fwp, int *len)
 	return (SUCCESS);
 }
 
-size_t	bring_arg(va_list *ap, int bits)
+int isfg_incr(t_gather *fwp)
 {
-	if (bits & (CV_S | CV_P))
-		return (va_arg(*ap, size_t));
-	else if (bits & CV_PCT)
-		return ('%');
-	else
-		return (va_arg(*ap, int));
-	return (ERROR);
+	if (fwp->bits & FG_POUND)
+		return (2);
+	return ((fwp->bits & (FG_PLUS | FG_SPACE)) != 0);
 }

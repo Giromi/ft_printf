@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 22:26:39 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 06:15:09 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/13 14:06:14 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*find_pct(const char **cur, int *cnt)
 	char	*before_str;
 	int		i;
 
-	len = ft_strchr_idx(*cur, '%');
+	len = ft_strchr_idx(*cur, '%', RTN_IDX);
 	if (check_len_max(cnt, len) == ERROR)
 		return (NULL);
 	if (salloc_int(&before_str, len + 1, '\0') == ERROR)

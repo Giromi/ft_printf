@@ -6,7 +6,7 @@
 #    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
-#    Updated: 2022/03/13 06:16:45 by minsuki2         ###   ########.fr        #
+#    Updated: 2022/03/13 17:34:15 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,19 +17,15 @@ CUR_DIR			= ./
 RM 				= rm -vf
 AR 				= ar
 ARFLAGS 		= -rcus
-MAKE 			= make
 MAKE_C 			= make -C
-
-
-LIBFT_DIR 		= libft/
-LIBFT 			= libft.a
-LIBFT_H 		= libft.h
-FT_PRINTF 		= libftprintf.a
 
 MANDATORY_DIR 	= mandatory/
 BONUS_DIR 		= bonus/
+LIBFT_DIR 		= libft/
 TARGET_DIR 		= $(MANDATORY_DIR)
 
+LIBFT 			= libft.a
+NAME	 		= libftprintf.a
 
 
 SRC_FILES 		= ft_printf.c		\
@@ -37,28 +33,31 @@ SRC_FILES 		= ft_printf.c		\
 		  		  analysis_pct.c	\
 		  		  make_pct.c		\
 		  		  make_num_mem.c
-
-
 BONUS_SRC_FILES = ft_printf_bonus.c			\
 		  	      ft_printf_utils_bonus.c	\
 		  	   	  analysis_pct_bonus.c		\
 		  		  make_pct_bonus.c			\
 				  make_num_mem_bonus.c
 
+OBJ_FILES 		= $(SRC_FILES:.c=.o)
+BONUS_OBJ_FILES = $(BONUS_SRC_FILES:.c=.o)
+
 HAD_FILES 		= ft_printf.h
 BONUS_HAD_FILES = ft_printf_bonus.h
+LIBFT_H 		= libft.h
 
-FT_PRINTF_BONUS_SRCS = $(addprefix $(BONUS_DIR), $(BONUS_SRC_FILES))
 
-
+# HADS = $(addprefix $(TARGET_DIR), $(HAD_FILES))
+# $(addprefix $(TARGET_DIR), $(BONUS_SRC_FILES))
+#
+FT_PRINTF_OBJS = $(addprefix $(MANDATORY_DIR), $(OBJ_FILES))
 FT_PRINTF_HADS = $(addprefix $(MANDATORY_DIR), $(HAD_FILES))
-FT_PRINTF_BONUS_HADS = $(addprefix $(BONUS_DIR), $(BONUS_HAD_FILES))
 
-FT_PRINTF_SRCS = $(SRC_FILES)
-SRCS = $(addprefix $(TARGET_DIR), $(FT_PRINTF_SRCS))
-HADS = $(addprefix $(TARGET_DIR), $(FT_PRINTF_HADS))
+FT_PRINTF_OBJS_BONUS = $(addprefix $(BONUS_DIR), $(BONUS_OBJ_FILES))
+FT_PRINTF_HADS_BONUS = $(addprefix $(BONUS_DIR), $(BONUS_HAD_FILES))
+
+OBJS = $(FT_PRINTF_OBJS)
 HADS = $(FT_PRINTF_HADS)
-OBJS = $(SRCS:.c=.o)
 
 #-----
 MAIN_DIR = main/
@@ -74,21 +73,24 @@ RESULT_PRINTF = $(MAIN_DIR)printf.txt
 
 
 
-all: $(FT_PRINTF)
-
-#libft는 수정 안할거라는 전제
-$(FT_PRINTF): $(LIBFT_DIR)$(LIBFT) $(OBJS)
-	cp $< $@
-	$(AR) $(ARFLAGS) $@ $(OBJS)
+all: $(LIBFT_DIR)$(LIBFT) $(NAME)
 
 $(LIBFT_DIR)$(LIBFT):
 	$(MAKE_C) $(LIBFT_DIR)
 
-$(TARGET_DIR)%.o: $(TARGET_DIR)%.c $(HADS) $(LIBFT_DIR)$(LIBFT_H)
-	@echo $@
+$(NAME): $(OBJS)
+	cp $(LIBFT_DIR)$(LIBFT) $(NAME)
+	$(AR) $(ARFLAGS) $@ $^
+
+
+$(TARGET_DIR)%.o: $(TARGET_DIR)%.c $(HADS)
 	$(CC) $(CFLAGS) $< $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -o $@
 
+%.o: %.c $(HADS)
+	$(CC) $(CFLAGS) $< $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -o $@
 
+# ---------------------------
+#
 
 ans: $(RESULT_PRINTF)
 
@@ -101,8 +103,11 @@ $(TARGET_PRINTF): $(MAIN_PRINTF)
 
 
 exe: all
-	$(CC) -g $(MAIN_FT_PRINTF) $(SRCS) $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -L./ -lftprintf -o $(TARGET_FT_PRINTF)
+	$(CC) -g $(MAIN_FT_PRINTF) $(FT_PRINTF_OBJS:.o=.c) $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -L./ -lftprintf -o $(TARGET_FT_PRINTF)
 	$(TARGET_FT_PRINTF) > $(RESULT_FT_PRINTF)
+
+fsan: all
+	$(CC) -fsanitize=address $(MAIN_FT_PRINTF) $(FT_PRINTF_OBJS:.o=.c) $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -L./ -lftprintf -o $(TARGET_FT_PRINTF)
 
 cmp: ans exe
 	@echo
@@ -114,27 +119,27 @@ cmp: ans exe
 #     @echo $@ Making...
 #     $(CC) -g $(MAIN_FT_PRINTF) $(PRINTFC) -I./ -L./ -lftprintf -o ft_printf.out
 
-$(PRINTFODIR)/%.o: $(PRINTFCDIR)/%.c $(PRINTFHEADER)
-
 clean:
 	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
 	$(MAKE_C) $(LIBFT_DIR) clean
 	@echo
-	$(RM) $(FT_PRINTF_SRCS:.c=.o)
-	$(RM) $(FT_PRINTF_BONUS_SRCS:.c=.o)
+	$(RM) $(FT_PRINTF_OBJS)
+	$(RM) $(FT_PRINTF_OBJS_BONUS)
 	@echo "-------------------------------------------------"
 
 fclean: clean
 	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
 	$(RM) $(LIBFT_DIR)$(LIBFT)
-	$(RM) $(FT_PRINTF)
+	$(RM) $(NAME)
 
 re: fclean all
 
-bonus:
-	@$(MAKE) "TARGET_DIR		= $(BONUS_DIR)
-			  FT_PRINTF_SRCS 	= $(BONUS_SRC_FILES)
-			  HADS				= $(HADS_FILES)
-		   	 "all
+bonus: $(LIBFT_DIR)$(LIBFT)
+	@$(MAKE) \
+	"TARGET_DIR	= $(BONUS_DIR)"				\
+	"OBJS		= $(FT_PRINTF_OBJS_BONUS)"	\
+	"HADS		= $(FT_PRINTF_HADS_BONUS)" 	\
+	all
+
 
 .PHONY: all clean fclean re bonus

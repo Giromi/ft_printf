@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_num_mem.c                                     :+:      :+:    :+:   */
+/*   make_num_mem_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 17:48:14 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/12 22:51:03 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/13 16:13:56 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-
-int isfg_incr(t_gather *fwp)
-{
-	if (fwp->bits & FG_POUND)
-		return (2);
-	return ((fwp->bits & (FG_PLUS | FG_SPACE)) != 0);
-}
+#include "ft_printf_bonus.h"
 
 static void	ft_handle_incr(char *dst, int bits, int sign)
 {
@@ -30,9 +23,9 @@ static void	ft_handle_incr(char *dst, int bits, int sign)
 		incr = '+';
 	else if (bits & FG_SPACE)
 		incr = ' ';
-	else if (bits & CV_SX)
+	else if (bits & (CV_SX | CV_P))
 		incr = 'x';
-	else if (bits & CV_LX)
+	else
 		incr = 'X';
 	i = 1;
 	if (bits & FG_POUND)
@@ -44,7 +37,7 @@ static void	ft_handle_incr(char *dst, int bits, int sign)
 		dst[i - 2] =  '0';
 }
 
-static void	convert_num_mem_base(char *dst, int bits, size_t arg, int len)
+static void	convert_num_mem_base(char *dst, size_t arg, int len, int bits)
 {
 	unsigned int nbr;
 
@@ -71,6 +64,7 @@ static void	convert_num_mem_base(char *dst, int bits, size_t arg, int len)
 static char	*make_dst(size_t arg, int sign, t_gather *fwp, int len)
 {
 	char	*dst;
+	int		offset;
 
 	if ((fwp->bits & FG_ZERO)
 		&& (salloc_int(&dst, fwp->full_len, '0') == ERROR))
@@ -79,10 +73,12 @@ static char	*make_dst(size_t arg, int sign, t_gather *fwp, int len)
 		&& (salloc_int(&dst, fwp->full_len, ' ') == ERROR))
 		return (NULL);
 	if (fwp->bits & FG_MINUS)
-		convert_num_mem_base(dst + isfg_incr(fwp), fwp->bits, arg, len);
+		offset = isfg_incr(fwp);
 	else
-		convert_num_mem_base(dst + fwp->full_len - len, fwp->bits, arg, len);
-	if (fwp->bits & (FG_PLUS | FG_SPACE))
+		offset = fwp->full_len - len;
+	ft_memset(dst + offset, '0', len);
+	convert_num_mem_base(dst + offset, arg, len, fwp->bits);
+	if (isfg_incr(fwp))
 		ft_handle_incr(dst, fwp->bits, sign);
 	return (dst);
 }

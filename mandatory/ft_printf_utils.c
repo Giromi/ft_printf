@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 01:39:46 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 05:59:39 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/13 17:26:25 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,17 @@ int	salloc_int(char **new, int len, char fill)
 	return (SUCCESS);
 }
 
-int	ft_strchr_idx(const char *s, int c)
+int	ft_strchr_idx(const char *s, int c, int switcher)
 {
 	int	idx;
 
 	idx = 0;
-	while (s[idx] && s[idx] != (char)c)
-		idx++;
-	if (!s[idx] && c != '%')
-		return (ERROR);
-	return (idx);
+	while (s[idx])
+		if (s[idx++] == (char)c)
+			return (idx - 1);
+	if (switcher)
+		return (idx);
+	return (ERROR);
 }
 
 
@@ -47,7 +48,8 @@ int	full_len_check(t_gather *fwp, int *len)
 {
 	int	full_len;
 
-	if (fwp->bits & PC_EXIST && fwp->precision > *len)
+	if (fwp->bits & PC_EXIST && ((fwp->bits & CV_S && *len > fwp->precision)
+			|| (!(fwp->bits & CV_S) && *len < fwp->precision)))
 		*len = fwp->precision;
 	full_len = fwp->width;
 	if (*len > fwp->width)

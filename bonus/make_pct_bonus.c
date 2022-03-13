@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_pct.c                                         :+:      :+:    :+:   */
+/*   make_pct_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:56:43 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 01:36:42 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/13 16:13:35 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include "libft/libft.h"
+#include "ft_printf_bonus.h"
 
 static int	check_len_num_mem(size_t arg, int bits)
 {
@@ -22,7 +21,7 @@ static int	check_len_num_mem(size_t arg, int bits)
 	len = 0;
 	base_num = DEC;
 	num = arg;
-	if (bits & (CV_SX | CV_LX | CV_D))
+	if (bits & (CV_SX | CV_LX | CV_D | CV_U))
 		arg = num;
 	if (bits & (CV_SX | CV_LX | CV_P))
 		base_num = HEX;
@@ -96,7 +95,7 @@ char	*make_pct(const char *cur, t_gather *fwp, size_t arg, int *cnt)
 		return (ft_substr(cur, 0, 1));
 	if (fwp->bits & CV_S)
 		len = check_len_str_char((char *)arg);
-	else if (CV_C | CV_PCT)
+	else if (fwp->bits & (CV_C | CV_PCT))
 		len = 1;
 	else
 		len = check_len_num_mem(arg, fwp->bits);

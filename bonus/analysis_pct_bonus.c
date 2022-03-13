@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   analysis_pct.c                                     :+:      :+:    :+:   */
+/*   analysis_pct_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hchang <hchang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 14:51:32 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/03/12 23:12:52 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/13 14:52:29 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 static void	solve_conflict(t_gather *fwp)
 {
@@ -28,7 +28,7 @@ static void	solve_conflict(t_gather *fwp)
 		fwp->bits &= ~(FG_ZERO | FG_PLUS | FG_SPACE | FG_POUND);
 	else if (fwp->bits & CV_P)
 	{
-		fwp->bits &= ~(FG_ZERO | FG_PLUS | FG_SPACE | PC_EXIST);
+		fwp->bits &= ~(FG_PLUS | FG_SPACE);
 		fwp->bits |= FG_POUND;
 	}
 	else if (fwp->bits & CV_D)
@@ -69,7 +69,7 @@ static void	find_conversion(const char **cur, int *bits)
 {
 	int	idx;
 
-	idx = ft_strchr_idx(CV_SET, **cur);
+	idx = ft_strchr_idx(CV_SET, **cur, RTN_ERROR);
 	if (**cur && idx != ERROR)
 	{
 		*bits |= 1 << (CV_BIT_BEGIN  - idx);
@@ -85,7 +85,7 @@ static void	find_flags(const char **cur, int *bits)
 
 	while (**cur)
 	{
-		idx = ft_strchr_idx(FG_SET, **cur);
+		idx = ft_strchr_idx(FG_SET, **cur, RTN_ERROR);
 		if (idx == ERROR)
 			break ;
 		*bits |= 1 << (FG_BIT_BEGIN - idx);
@@ -93,15 +93,12 @@ static void	find_flags(const char **cur, int *bits)
 	}
 }
 
-size_t	analysis_pct(const char **cur, va_list *ap, t_gather *fwp)
+void	analysis_pct(const char **cur, t_gather *fwp)
 {
-	if (!**cur)
-		return (SUCCESS);
 	(*cur)++;
 	find_flags(cur, &fwp->bits);
 	find_width_precision(cur, fwp);
 	find_conversion(cur, &fwp->bits);
 	if (!(fwp->bits & (FAIL_INT| FAIL_CONV)))
 		solve_conflict(fwp);
-	return (bring_arg(ap, fwp->bits));
 }
