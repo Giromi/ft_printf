@@ -1,5 +1,5 @@
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#ifndef FT_PRINTF_BONUS_H
+# define FT_PRINTF_BONUS_H
 
 # include "libft.h"
 # include <stdarg.h>
@@ -24,20 +24,20 @@
 # define CV_SX 0B100
 # define CV_LX 0B10
 # define CV_PCT 0B1
-# define ERROR -1
-# define SUCCESS 0
-# define CV_C_LEN 1
+
 # define HEX 16
+# define DEC 10
 # define HEX_BASE_LOWER "0123456789abcdef"
 # define HEX_BASE_UPPER "0123456789ABCDEF"
-# define HEX_BASE_ALL "0123456789abcdefABCDEF"
-# define DEC 10
 # define DEC_BASE "0123456789"
 # define FG_SET "0-+ #"
-# define FG_BIT_BEGIN 15
 # define CV_SET "cspdiuxX%"
+# define FG_BIT_BEGIN 15
 # define CV_BIT_BEGIN 8
 # define FINAL_LEN 2147483646
+
+# define ERROR -1
+# define SUCCESS 0
 # define RTN_ERROR 0
 # define RTN_IDX 1
 
@@ -56,15 +56,12 @@ typedef struct s_pctlst
 }	t_pctlst;
 
 int			ft_printf(const char *s, ...);
-int			ft_strchr_idx(const char *s, int c, int switcher);
 void		analysis_pct(const char **cur, t_gather *fwp);
 char		*make_pct(const char *cur, t_gather *fwp, size_t arg, int *cnt);
 char		*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len);
 int			salloc_int(char **new, int len, char fill);
-void		ft_pctlstadd_back(t_pctlst **lst, t_pctlst *new);
-t_pctlst	*ft_pctlstnew(char *before);
-int			full_len_check(t_gather *fwp, int *len);
-void		info_fwp(t_gather *fwp);
+int			ft_strchr_idx(const char *s, int c, int switcher);
 int			check_len_max(int *cnt, int check);
+int			full_len_check(t_gather *fwp, int *len);
 int			isfg_incr(t_gather *fwp);
 #endif

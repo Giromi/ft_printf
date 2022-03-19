@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 17:48:14 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 16:13:56 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/19 16:31:27 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,9 @@ char	*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len)
 	int sign;
 
 	sign = 1;
-	if (fwp->bits & (CV_SX | CV_LX) && arg == 0)
-		fwp->bits &= ~(FG_POUND);
-	if (fwp->bits & CV_D && (int)arg < 0)
+	if (arg == 0 && fwp->bits & (CV_SX | CV_LX))
+			fwp->bits &= ~(FG_POUND);
+	if ((int)arg < 0 && fwp->bits & CV_D)
 	{
 		sign = -1;
 		fwp->bits |= FG_PLUS;

@@ -6,11 +6,46 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 19:56:43 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 16:13:35 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/19 16:31:40 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
+
+static char	*make_dst(char *str_arg, int bits, int len, int full_len)
+{
+	char	*str;
+	int		i;
+
+	if ((bits & FG_ZERO)
+		&& (salloc_int(&str, full_len, '0') == ERROR))
+		return (NULL);
+	else if (!(bits & FG_ZERO)
+		&& (salloc_int(&str, full_len, ' ') == ERROR))
+		return (NULL);
+	if (bits & FG_MINUS)
+		i = 0;
+	else
+		i = full_len - len;
+	while (len-- > 0)
+	{
+		if (bits & (CV_C | CV_PCT))
+			str[i++] = (size_t)str_arg;
+		else
+			str[i++] = *(str_arg)++;
+	}
+	return (str);
+}
+
+static char	*make_str_char(t_gather *fwp, char *arg, int *cnt, int len)
+{
+	if (full_len_check(fwp, &len) == ERROR
+			|| check_len_max(cnt, fwp->full_len) == ERROR)
+		return (NULL);
+	if ((fwp->bits & CV_S) && arg == NULL)
+		return (make_dst("(null)", fwp->bits, len, fwp->full_len));
+	return (make_dst(arg, fwp->bits, len, fwp->full_len));
+}
 
 static int	check_len_num_mem(size_t arg, int bits)
 {
@@ -48,41 +83,6 @@ static int	check_len_str_char(const char *arg)
 	return (len);
 }
 
-static char	*make_dst(char *str_arg, int bits, int len, int full_len)
-{
-	char	*str;
-	int		i;
-
-	if ((bits & FG_ZERO)
-		&& (salloc_int(&str, full_len, '0') == ERROR))
-		return (NULL);
-	else if (!(bits & FG_ZERO)
-		&& (salloc_int(&str, full_len, ' ') == ERROR))
-		return (NULL);
-	if (bits & FG_MINUS)
-		i = 0;
-	else
-		i = full_len - len;
-	while (len-- > 0)
-	{
-		if (bits & (CV_C | CV_PCT))
-			str[i++] = (size_t)str_arg;
-		else
-			str[i++] = *(str_arg)++;
-	}
-	return (str);
-}
-
-static char	*make_str_char(t_gather *fwp, char *arg, int *cnt, int len)
-{
-	if (full_len_check(fwp, &len) == ERROR
-			|| check_len_max(cnt, fwp->full_len) == ERROR)
-		return (NULL);
-	if ((fwp->bits & CV_S) && arg == NULL)
-		return (make_dst("(null)", fwp->bits, len, fwp->full_len));
-	return (make_dst(arg, fwp->bits, len, fwp->full_len));
-}
-
 char	*make_pct(const char *cur, t_gather *fwp, size_t arg, int *cnt)
 {
 	int		len;
@@ -105,4 +105,3 @@ char	*make_pct(const char *cur, t_gather *fwp, size_t arg, int *cnt)
 		return (make_str_char(fwp, (char *)arg, cnt, len));
 	return (NULL);
 }
-

@@ -3,40 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   analysis_pct_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchang <hchang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 14:51:32 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/03/13 14:52:29 by minsuki2         ###   ########.fr       */
+/*   Created: 2022/03/19 16:04:04 by minsuki2          #+#    #+#             */
+/*   Updated: 2022/03/19 16:31:04 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-static void	solve_conflict(t_gather *fwp)
+static void	solve_conflict(int *bits)
 {
-	if ((fwp->bits & FG_ZERO) && (fwp->bits & FG_MINUS))
-		fwp->bits &= ~FG_ZERO;
-	if ((fwp->bits & FG_PLUS) && (fwp->bits & FG_SPACE))
-		fwp->bits &= ~FG_SPACE;
-	if ((fwp->bits & FG_ZERO) && (fwp->bits & PC_EXIST))
-		fwp->bits &= ~FG_ZERO;
-	if (fwp->bits & CV_I)
-		fwp->bits |= CV_D;
-	if (fwp->bits & (CV_C | CV_PCT))
-		fwp->bits &= ~(FG_PLUS | FG_SPACE | FG_POUND | PC_EXIST);
-	else if (fwp->bits & CV_S)
-		fwp->bits &= ~(FG_ZERO | FG_PLUS | FG_SPACE | FG_POUND);
-	else if (fwp->bits & CV_P)
+	if ((*bits & FG_ZERO) && (*bits & FG_MINUS))
+		*bits &= ~FG_ZERO;
+	if ((*bits & FG_PLUS) && (*bits & FG_SPACE))
+		*bits &= ~FG_SPACE;
+	if ((!(*bits & CV_S) && ((*bits & FG_ZERO) && (*bits & PC_EXIST))))
+		*bits &= ~FG_ZERO;
+	if (*bits & CV_I)
+		*bits |= CV_D;
+	else if (*bits & CV_S)
+		*bits &= ~(FG_PLUS | FG_SPACE | FG_POUND);
+	else if (*bits & (CV_P | CV_SX | CV_LX))
 	{
-		fwp->bits &= ~(FG_PLUS | FG_SPACE);
-		fwp->bits |= FG_POUND;
+		*bits &= ~(FG_PLUS | FG_SPACE);
+		if (*bits & CV_P)
+			*bits |= FG_POUND;
 	}
-	else if (fwp->bits & CV_D)
-		fwp->bits &= ~(FG_POUND);
-	else if (fwp->bits & CV_U)
-		fwp->bits &= ~(FG_PLUS | FG_SPACE | FG_POUND);
-	else if (fwp->bits & (CV_SX | CV_LX))
-		fwp->bits &= ~(FG_PLUS | FG_SPACE);
+	else if (*bits & CV_D)
+		*bits &= ~(FG_POUND);
+	else if (*bits & CV_U)
+		*bits &= ~(FG_PLUS | FG_SPACE | FG_POUND);
+	else if (*bits & (CV_C | CV_PCT))
+		*bits &= ~(FG_PLUS | FG_SPACE | FG_POUND | PC_EXIST);
 }
 
 
@@ -100,5 +99,5 @@ void	analysis_pct(const char **cur, t_gather *fwp)
 	find_width_precision(cur, fwp);
 	find_conversion(cur, &fwp->bits);
 	if (!(fwp->bits & (FAIL_INT| FAIL_CONV)))
-		solve_conflict(fwp);
+		solve_conflict(&fwp->bits);
 }

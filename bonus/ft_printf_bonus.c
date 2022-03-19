@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 22:26:39 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 16:12:59 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/19 16:31:13 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,22 @@ static char	*find_pct(const char **cur, int *cnt)
 	return (before_str);
 }
 
+static int	loop_printf(const char **cur, va_list *ap, int *cnt, t_pctlst *lst)
+{
+	t_gather	fwp;
+
+	ft_bzero(&fwp, sizeof(t_gather));
+	lst->before_pct = find_pct(cur, cnt);
+	if (!lst->before_pct)
+		return (ERROR);
+	if (**cur)
+		analysis_pct(cur, &fwp);
+	lst->after_pct = make_pct(*cur, &fwp, bring_arg(ap, fwp.bits), cnt);
+	if (!lst->after_pct)
+		return (ERROR);
+	return (fwp.full_len);
+}
+
 static void	print_lst(t_pctlst *lst, int full_len)
 {
 	if (lst->after_pct)
@@ -49,24 +65,6 @@ static void	print_lst(t_pctlst *lst, int full_len)
 		free(lst->after_pct);
 	}
 	free(lst->before_pct);
-}
-
-static int	loop_printf(const char **cur, va_list *ap, int *cnt, t_pctlst *lst)
-{
-	t_gather	fwp;
-
-	ft_bzero(&fwp, sizeof(t_gather));
-	lst->before_pct = find_pct(cur, cnt);
-	// printf("----------------------\n");
-	// printf("before_pct : %s\n", lst->before_pct);
-	if (!lst->before_pct)
-		return (ERROR);
-	if (**cur)
-		analysis_pct(cur, &fwp);
-	lst->after_pct = make_pct(*cur, &fwp, bring_arg(ap, fwp.bits), cnt);
-	// printf("after_pct : %s\n", lst->after_pct);
-	// printf("----------------------\n");
-	return (fwp.full_len);
 }
 
 int	ft_printf(const char *s, ...)
@@ -84,7 +82,8 @@ int	ft_printf(const char *s, ...)
 		full_len = loop_printf(&s, &ap, &cnt, &lst);
 		if (full_len == ERROR)
 			cnt = ERROR;
-		print_lst(&lst, full_len);
+		if (lst.before_pct)
+			print_lst(&lst, full_len);
 	}
 	va_end(ap);
 	return (cnt);
