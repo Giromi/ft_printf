@@ -6,7 +6,7 @@
 #    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
-#    Updated: 2022/03/13 22:29:29 by minsuki2         ###   ########.fr        #
+#    Updated: 2022/03/14 00:19:05 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -134,17 +134,20 @@ cmp: ans exe
 #     $(CC) -g $(MAIN_FT_PRINTF) $(PRINTFC) -I./ -L./ -lftprintf -o ft_printf.out
 
 clean:
-	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
 	$(MAKE_C) $(LIBFT_DIR) clean
 	@echo
-	$(RM) $(FT_PRINTF_OBJS)
-	$(RM) $(FT_PRINTF_OBJS_BONUS)
-	@echo "-------------------------------------------------"
+	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
+	@$(RM) $(FT_PRINTF_OBJS)
+	@$(RM) $(FT_PRINTF_OBJS_BONUS)
+	@echo ">>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<"
+	@echo
 
 fclean: clean
 	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
-	$(RM) $(LIBFT_DIR)$(LIBFT)
-	$(RM) $(NAME)
+	@$(RM) $(LIBFT_DIR)$(LIBFT)
+	@$(RM) $(NAME)
+	@echo ">>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<"
+	@echo
 
 re: fclean all
 

@@ -8,7 +8,7 @@ TESTS = $(shell for ((i=1;i<=2000;i++)); do echo "$$i "; done)
 
 NAME = tester
 LIBTEST = libtest/libtest.a
-LIBFTPRINTF = ${LIBFTPRINTF_DIR}libftprintf.a
+LIBFTPRINTF = ${LIBFTPRINTF_DIR}/libftprintf.a
 
 SRC_DIR = ./src
 OBJ_DIR = ./obj

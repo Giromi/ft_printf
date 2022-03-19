@@ -1,2 +1,0 @@
-mandatory/ft_printf.o
-gcc -Wall -Wextra -Werror -c mandatory/ft_printf.c -Ilibft/ -Ibonus/	OBJS 		= bonus/ft_printf_bonus.o bonus/ft_printf_utils_bonus.o bonus/analysis_pct_bonus.o bonus/make_pct_bonus.o bonus/make_num_mem_bonus.o	HADS = bonus/ft_printf_bonus.h -o mandatory/ft_printf.o
