@@ -6,7 +6,7 @@
 #    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
-#    Updated: 2022/03/13 20:21:45 by minsuki2         ###   ########.fr        #
+#    Updated: 2022/03/14 00:19:05 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,6 +100,8 @@ ans:
 	$(CC) -g $(MAIN_PRINTF) -I./libft/ -o $(TARGET_PRINTF)
 	$(TARGET_PRINTF) > $(RESULT_PRINTF)
 	@echo
+	head -c 20 $(RESULT_PRINTF) | cat -e
+	@echo
 	grep -aw "cnt" $(RESULT_PRINTF)
 # cat -e $(RESULT_PRINTF)
 
@@ -111,9 +113,11 @@ exe: all
 	$(CC) -g $(MAIN_FT_PRINTF) $(FT_PRINTF_OBJS:.o=.c) $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -L./ -lftprintf -o $(TARGET_FT_PRINTF)
 	$(TARGET_FT_PRINTF) > $(RESULT_FT_PRINTF)
 	@echo
-	grep -aw "cnt" $(RESULT_FT_PRINTF)
+	head -c 20 $(RESULT_FT_PRINTF) | cat -e
 	@echo
+	grep -aw "cnt" $(RESULT_FT_PRINTF)
 # cat -e $(RESULT_FT_PRINTF)
+#@echo
 
 fsan: all
 	$(CC) -fsanitize=address $(MAIN_FT_PRINTF) $(FT_PRINTF_OBJS:.o=.c) $(INC)$(LIBFT_DIR) $(INC)$(TARGET_DIR) -L./ -lftprintf -o $(TARGET_FT_PRINTF)
@@ -130,17 +134,20 @@ cmp: ans exe
 #     $(CC) -g $(MAIN_FT_PRINTF) $(PRINTFC) -I./ -L./ -lftprintf -o ft_printf.out
 
 clean:
-	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
 	$(MAKE_C) $(LIBFT_DIR) clean
 	@echo
-	$(RM) $(FT_PRINTF_OBJS)
-	$(RM) $(FT_PRINTF_OBJS_BONUS)
-	@echo "-------------------------------------------------"
+	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
+	@$(RM) $(FT_PRINTF_OBJS)
+	@$(RM) $(FT_PRINTF_OBJS_BONUS)
+	@echo ">>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<"
+	@echo
 
 fclean: clean
 	@echo ">>>>>>>>>>>>>>>> Delete List <<<<<<<<<<<<<<<<<<<<"
-	$(RM) $(LIBFT_DIR)$(LIBFT)
-	$(RM) $(NAME)
+	@$(RM) $(LIBFT_DIR)$(LIBFT)
+	@$(RM) $(NAME)
+	@echo ">>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<"
+	@echo
 
 re: fclean all
 
