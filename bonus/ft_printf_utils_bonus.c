@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 01:39:46 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/19 16:31:22 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/20 15:22:49 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	ft_strchr_idx(const char *s, int c, int switcher)
 	return (ERROR);
 }
 
-
 int	check_len_max(int *cnt, int check)
 {
 	if (FINAL_LEN - *cnt < check)
@@ -48,9 +47,10 @@ int	full_len_check(t_gather *fwp, int *len)
 {
 	int	full_len;
 
-	if (fwp->bits & PC_EXIST && ((fwp->bits & CV_S && *len > fwp->precision)
-			|| (!(fwp->bits & CV_S) && *len < fwp->precision)))
-		*len = fwp->precision;
+	if (fwp->bits & PC_EXIST && fwp->precision > 0)
+		if ((fwp->bits & CV_S && *len > fwp->precision)
+			|| (!(fwp->bits & CV_S) && *len < fwp->precision))
+			*len = fwp->precision;
 	full_len = fwp->width;
 	if (*len > fwp->width)
 		full_len = *len;
@@ -62,7 +62,7 @@ int	full_len_check(t_gather *fwp, int *len)
 	return (SUCCESS);
 }
 
-int isfg_incr(t_gather *fwp)
+int	isfg_incr(t_gather *fwp)
 {
 	if (fwp->bits & FG_POUND)
 		return (2);

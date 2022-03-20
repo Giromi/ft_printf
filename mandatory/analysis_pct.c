@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/19 16:04:04 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/19 16:04:06 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/20 15:21:15 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static void	solve_conflict(int *bits)
 		*bits &= ~(FG_PLUS | FG_SPACE | FG_POUND | PC_EXIST);
 }
 
-
 static void	find_width_precision(const char **cur, t_gather *fwp)
 {
 	if (ft_isdigit(**cur))
@@ -63,7 +62,6 @@ static void	find_width_precision(const char **cur, t_gather *fwp)
 	}
 }
 
-
 static void	find_conversion(const char **cur, int *bits)
 {
 	int	idx;
@@ -71,7 +69,7 @@ static void	find_conversion(const char **cur, int *bits)
 	idx = ft_strchr_idx(CV_SET, **cur, RTN_ERROR);
 	if (**cur && idx != ERROR)
 	{
-		*bits |= 1 << (CV_BIT_BEGIN  - idx);
+		*bits |= 1 << (CV_BIT_BEGIN - idx);
 		(*cur)++;
 	}
 	else
@@ -98,6 +96,6 @@ void	analysis_pct(const char **cur, t_gather *fwp)
 	find_flags(cur, &fwp->bits);
 	find_width_precision(cur, fwp);
 	find_conversion(cur, &fwp->bits);
-	if (!(fwp->bits & (FAIL_INT| FAIL_CONV)))
+	if (!(fwp->bits & (FAIL_INT | FAIL_CONV)))
 		solve_conflict(&fwp->bits);
 }

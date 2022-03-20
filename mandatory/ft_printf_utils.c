@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 01:39:46 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/20 14:26:37 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/20 15:20:18 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	ft_strchr_idx(const char *s, int c, int switcher)
 	return (ERROR);
 }
 
-
 int	check_len_max(int *cnt, int check)
 {
 	if (FINAL_LEN - *cnt < check)
@@ -63,7 +62,7 @@ int	full_len_check(t_gather *fwp, int *len)
 	return (SUCCESS);
 }
 
-int isfg_incr(t_gather *fwp)
+int	isfg_incr(t_gather *fwp)
 {
 	if (fwp->bits & FG_POUND)
 		return (2);

@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 17:48:14 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 18:08:14 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/20 15:22:00 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ static void	ft_handle_incr(char *dst, int bits, int sign)
 		i++;
 	dst[i - 1] = incr;
 	if (bits & FG_POUND)
-		dst[i - 2] =  '0';
+		dst[i - 2] = '0';
 }
 
 static void	convert_num_mem_base(char *dst, size_t arg, int len, int bits)
 {
-	unsigned int nbr;
+	unsigned int	nbr;
 
 	if (arg && len)
 	{
@@ -85,18 +85,18 @@ static char	*make_dst(size_t arg, int sign, t_gather *fwp, int len)
 
 char	*make_num_mem(t_gather *fwp, size_t arg, int *cnt, int len)
 {
-	int sign;
+	int	sign;
 
 	sign = 1;
 	if (arg == 0 && fwp->bits & (CV_SX | CV_LX))
-			fwp->bits &= ~(FG_POUND);
+		fwp->bits &= ~(FG_POUND);
 	if ((int)arg < 0 && fwp->bits & CV_D)
 	{
 		sign = -1;
 		fwp->bits |= FG_PLUS;
 	}
 	if (full_len_check(fwp, &len) == ERROR
-			|| check_len_max(cnt, fwp->full_len) == ERROR)
+		|| check_len_max(cnt, fwp->full_len) == ERROR)
 		return (NULL);
 	return (make_dst(arg * sign, sign, fwp, len));
 }
