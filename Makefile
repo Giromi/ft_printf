@@ -6,7 +6,7 @@
 #    By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/12 19:22:21 by minsuki2          #+#    #+#              #
-#    Updated: 2022/03/14 00:19:05 by minsuki2         ###   ########.fr        #
+#    Updated: 2022/03/20 14:18:04 by minsuki2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,13 +97,14 @@ ans:
 	cp $(MAIN_FT_PRINTF) $(MAIN_PRINTF)
 	sed -i "" 's/ft_printf/printf/g' $(MAIN_PRINTF)
 	@echo
-	$(CC) -g $(MAIN_PRINTF) -I./libft/ -o $(TARGET_PRINTF)
+	$(CC) -g $(MAIN_PRINTF) -I../libft/ -I../mandatory -o $(TARGET_PRINTF)
 	$(TARGET_PRINTF) > $(RESULT_PRINTF)
 	@echo
 	head -c 20 $(RESULT_PRINTF) | cat -e
 	@echo
-	grep -aw "cnt" $(RESULT_PRINTF)
-# cat -e $(RESULT_PRINTF)
+	grep -aw "abc" $(RESULT_PRINTF)
+#grep -aw "cnt" $(RESULT_PRINTF)
+#cat -e $(RESULT_PRINTF)
 
 
 
@@ -115,7 +116,8 @@ exe: all
 	@echo
 	head -c 20 $(RESULT_FT_PRINTF) | cat -e
 	@echo
-	grep -aw "cnt" $(RESULT_FT_PRINTF)
+	grep -aw "abc" $(RESULT_FT_PRINTF)
+# grep -aw "cnt" $(RESULT_FT_PRINTF)
 # cat -e $(RESULT_FT_PRINTF)
 #@echo
 

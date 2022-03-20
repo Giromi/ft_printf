@@ -6,7 +6,7 @@
 /*   By: minsuki2 <minsuki2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 01:39:46 by minsuki2          #+#    #+#             */
-/*   Updated: 2022/03/13 17:26:25 by minsuki2         ###   ########.fr       */
+/*   Updated: 2022/03/20 14:26:37 by minsuki2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,10 @@ int	full_len_check(t_gather *fwp, int *len)
 {
 	int	full_len;
 
-	if (fwp->bits & PC_EXIST && ((fwp->bits & CV_S && *len > fwp->precision)
-			|| (!(fwp->bits & CV_S) && *len < fwp->precision)))
-		*len = fwp->precision;
+	if (fwp->bits & PC_EXIST && fwp->precision > 0)
+		if ((fwp->bits & CV_S && *len > fwp->precision)
+			|| (!(fwp->bits & CV_S) && *len < fwp->precision))
+			*len = fwp->precision;
 	full_len = fwp->width;
 	if (*len > fwp->width)
 		full_len = *len;
