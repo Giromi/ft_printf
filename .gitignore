@@ -14,6 +14,8 @@ bin-release/
 *.ipa
 *.apk
 
+*.out
+*.txt
 ft_printf_tester/
 printfTester/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
